@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cvfix.com.ng/sitemap.xml

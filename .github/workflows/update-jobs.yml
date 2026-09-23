@@ -1,0 +1,32 @@
+name: Auto-Sync Remote Jobs for Nigeria
+
+on:
+  schedule:
+    # Runs every 12 hours (at 00:00 and 12:00 UTC)
+    - cron: '0 0,12 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  sync-jobs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Job Ingestion Script
+        run: node scripts/fetch-remote-jobs.js
+
+      - name: Commit and Push Updated Job Data
+        run: |
+          git config --global user.name "CVFix Remote Sync Bot"
+          git config --global user.email "bot@cvfix.com.ng"
+          git add src/data/mockJobs.ts
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(jobs): auto-sync live worldwide remote jobs [skip ci]" && git push)
