@@ -14,7 +14,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between font-medium">
           <div className="flex items-center space-x-2">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            <span>Live Remote FX Index: <strong>$1.00 USD ≈ ₦1,550 NGN</strong></span>
+            <span>Live Remote FX Index: <strong>$1.00 USD ≈ ₦1,300 NGN</strong></span>
           </div>
           <div className="hidden sm:flex items-center space-x-4 text-emerald-400/80">
             <span>🔥 48 New Global Remote Roles Open to Nigeria Today</span>

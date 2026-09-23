@@ -54,7 +54,7 @@ export function App() {
             detectedRole: targetRole || "Customer Operations & Digital Specialist",
             experienceLevel: "Mid-Level Professional (2-4 yrs)",
             estimatedRemoteSalaryUSD: "$1,500 - $2,400/mo",
-            estimatedSalaryNaira: "₦2,325,000 - ₦3,720,000/mo",
+            estimatedSalaryNaira: "₦1,950,000 - ₦3,120,000/mo",
           },
           criticalFlags: [
             {
@@ -90,7 +90,7 @@ export function App() {
               title: "Remote Customer Success & Operations Specialist",
               companyType: "US B2B SaaS Platform",
               salaryUSD: "$1,500/mo",
-              salaryNaira: "₦2,325,000/mo",
+              salaryNaira: "₦1,950,000/mo",
               matchPercentage: 84,
               whyFit: "Matches your customer resolution track record; needs Zendesk keyword injection."
             },
@@ -98,7 +98,7 @@ export function App() {
               title: "Virtual Executive Operations Assistant",
               companyType: "UK E-commerce Agency",
               salaryUSD: "$1,200/mo",
-              salaryNaira: "₦1,860,000/mo",
+              salaryNaira: "₦1,560,000/mo",
               matchPercentage: 78,
               whyFit: "High alignment with multitasking and communication; requires project management framing."
             },
@@ -106,7 +106,7 @@ export function App() {
               title: "Data Operations & Quality Associate",
               companyType: "Global AI & Tech Lab",
               salaryUSD: "$1,800/mo",
-              salaryNaira: "₦2,790,000/mo",
+              salaryNaira: "₦2,340,000/mo",
               matchPercentage: 72,
               whyFit: "Requires quantifiable analytical bullets and spreadsheet certification keywords."
             }
@@ -125,7 +125,7 @@ export function App() {
             ],
             coverLetter: "Dear Hiring Team,\n\nI am writing to express my enthusiastic interest in the remote role. With a proven background in driving high-efficiency operations, resolving complex stakeholder inquiries, and upholding stringent SLA benchmarks, I bring the dedication and technical agility required to excel in your distributed team.\n\nIn my previous roles, I successfully managed high-volume communications and introduced workflow automations that reduced resolution latency by over 35% while maintaining a 98%+ satisfaction rate. I am equipped with high-speed fiber internet, dedicated backup power infrastructure, and extensive experience collaborating synchronously and asynchronously across global time zones.\n\nI look forward to discussing how my skills and proactive work ethic can support your organizational milestones.\n\nWarm regards,\nCandidate"
           },
-          viralShareText: `My CV ATS Score is ${simulatedScore}/100 🚀 on CVFix.com.ng! It matches remote US/UK roles paying up to $1,800/mo (~₦2.7M). Check your global ATS score free at cvfix.com.ng #CVFix #JapaCV #RemoteWork`
+          viralShareText: `My CV ATS Score is ${simulatedScore}/100 🚀 on CVFix.com.ng! It matches remote US/UK roles paying up to $1,800/mo (~₦2.3M). Check your global ATS score free at cvfix.com.ng #CVFix #JapaCV #RemoteWork`
         });
       }, 500);
     }

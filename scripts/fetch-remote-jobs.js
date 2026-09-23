@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const USD_TO_NAIRA_RATE = 1550;
+const USD_TO_NAIRA_RATE = 1300;
 
 function mapCategory(cat, title) {
   const combined = `${cat} ${title}`.toLowerCase();

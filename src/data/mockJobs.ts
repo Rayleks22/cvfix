@@ -7,7 +7,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
     "company": "Sanctuary Computer Inc",
     "category": "Tech & Engineering",
     "salaryUSD": "$80k - $150k",
-    "salaryNaira": "₦124,232,500/mo",
+    "salaryNaira": "₦104,195,000/mo",
     "location": "Worldwide",
     "type": "contract",
     "tags": [
@@ -28,7 +28,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
     "company": "Coalition Technologies ",
     "category": "Virtual Assistant",
     "salaryUSD": "$35,3k- $52k",
-    "salaryNaira": "₦54,795,600/mo",
+    "salaryNaira": "₦45,957,600/mo",
     "location": "Worldwide",
     "type": "full time",
     "tags": [
@@ -49,7 +49,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
     "company": "Credit Wellness, LLC",
     "category": "Content & Writing",
     "salaryUSD": "OTE $25k - $35k",
-    "salaryNaira": "₦3,929,250/mo",
+    "salaryNaira": "₦3,295,500/mo",
     "location": "Worldwide",
     "type": "full time",
     "tags": [
@@ -69,7 +69,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
     "company": "Unio Digital",
     "category": "Tech & Engineering",
     "salaryUSD": "$2,500/mo",
-    "salaryNaira": "₦3,875,000/mo",
+    "salaryNaira": "₦3,250,000/mo",
     "location": "Worldwide",
     "type": "full time",
     "tags": [
@@ -90,7 +90,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
     "company": "IAPWE",
     "category": "Content & Writing",
     "salaryUSD": "$50-$75 /hour",
-    "salaryNaira": "₦7,866,250/mo",
+    "salaryNaira": "₦6,597,500/mo",
     "location": "Worldwide",
     "type": "freelance",
     "tags": [
@@ -107,7 +107,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
     "company": "Coalition Technologies ",
     "category": "Content & Writing",
     "salaryUSD": "$20k -$35k",
-    "salaryNaira": "₦3,154,250/mo",
+    "salaryNaira": "₦2,645,500/mo",
     "location": "Worldwide",
     "type": "freelance",
     "tags": [
