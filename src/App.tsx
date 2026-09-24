@@ -252,7 +252,7 @@ export function App() {
       )}
 
       {/* Footer */}
-      <Footer />
+      <Footer onNavigate={setActiveTab} />
     </div>
   );
 }
