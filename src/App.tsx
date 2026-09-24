@@ -10,12 +10,29 @@ import { Footer } from './components/Footer';
 import { AnalysisResult } from './types';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<'scanner' | 'jobs' | 'pricing'>('scanner');
+  const getInitialTab = (): 'scanner' | 'jobs' | 'pricing' => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname.toLowerCase();
+      if (path.includes('job')) return 'jobs';
+      if (path.includes('pric')) return 'pricing';
+    }
+    return 'scanner';
+  };
+
+  const [activeTab, setActiveTabState] = useState<'scanner' | 'jobs' | 'pricing'>(getInitialTab());
   const [analysisState, setAnalysisState] = useState<'idle' | 'loading' | 'analyzed' | 'unlocked'>('idle');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [showPaystackModal, setShowPaystackModal] = useState(false);
   const [savedCvText, setSavedCvText] = useState('');
   const [savedTargetRole, setSavedTargetRole] = useState('');
+
+  const setActiveTab = (tab: 'scanner' | 'jobs' | 'pricing') => {
+    setActiveTabState(tab);
+    if (typeof window !== 'undefined') {
+      const newPath = tab === 'jobs' ? '/jobs' : tab === 'pricing' ? '/pricing' : '/';
+      window.history.pushState({}, '', newPath);
+    }
+  };
 
   const handleStartAnalysis = async (text: string, targetRole: string) => {
     setSavedCvText(text);
