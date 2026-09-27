@@ -9,25 +9,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
-      {/* Refined Live Ticker Bar */}
-      <div className="bg-slate-900 text-slate-200 px-4 py-1.5 text-xs">
-        <div className="max-w-7xl mx-auto w-full flex items-center justify-between font-medium">
-          <div className="flex items-center space-x-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span className="text-slate-300">
-              Live Currency Benchmark: <strong className="text-white font-semibold">$1.00 USD ≈ ₦1,300 NGN</strong>
-            </span>
-          </div>
-          <div className="hidden sm:flex items-center space-x-4 text-slate-300">
-            <span className="flex items-center gap-1.5 text-slate-300">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Vetted 2026 International ATS Standards
-            </span>
-            <span className="text-slate-600">•</span>
-            <span className="text-emerald-400 font-semibold">Remote Jobs Updated Daily</span>
-          </div>
-        </div>
-      </div>
-
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
