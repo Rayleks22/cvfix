@@ -19,7 +19,9 @@ export const PaystackCheckout: React.FC<PaystackCheckoutProps> = ({ onSuccess, o
 
   const handlePaystackPayment = () => {
     setIsProcessing(true);
-    const paystackKey = 'pk_test_sample_cvfix_nigeria';
+    // Replace with your Live Paystack Public Key in Cloudflare Pages (e.g. pk_live_...) or .env
+    // @ts-ignore
+    const paystackKey = (import.meta as any).env?.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_sample_cvfix_nigeria';
 
     if (window.PaystackPop && window.PaystackPop.setup) {
       const handler = window.PaystackPop.setup({

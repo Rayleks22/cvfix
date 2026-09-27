@@ -368,10 +368,112 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
         </div>
       </div>
 
-      {/* Section 5: Fintech Sponsor Banner */}
+      {/* Section 5: Blurred Interactive CV Teaser Preview (Anti-Screenshot Protected) */}
+      {!isUnlocked && (
+        <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm relative overflow-hidden">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-6">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-[11px] font-bold uppercase tracking-wider">
+                  Full Document Preview
+                </span>
+                <span className="text-xs text-slate-500">• Single-Page Harvard Format</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
+                Your Upgraded ATS Resume & Cover Letter
+              </h3>
+            </div>
+            <span className="text-xs font-semibold text-teal-800 bg-teal-50 px-3 py-1 rounded-lg border border-teal-200">
+              🔒 20+ Upgraded Metric Bullets Ready
+            </span>
+          </div>
+
+          {/* Document Container with Blurred Content & Lock Overlay */}
+          <div className="relative rounded-xl border border-slate-200 bg-slate-50/50 p-6 sm:p-10 font-sans overflow-hidden">
+            {/* Real Header visible */}
+            <div className="border-b border-slate-200 pb-4 mb-6 text-left">
+              <h4 className="text-xl font-black text-slate-900 uppercase tracking-tight">CANDIDATE RESUME</h4>
+              <p className="text-xs font-semibold text-teal-800 mt-0.5">
+                Target Role: {result.candidateProfile.detectedRole}
+              </p>
+              <p className="text-[11px] text-slate-500 mt-0.5">
+                Lagos, Nigeria • Available for International Remote / Relocation
+              </p>
+            </div>
+
+            {/* Section: Professional Summary (Partially Blurred) */}
+            <div className="text-left space-y-2 mb-6">
+              <span className="text-xs font-bold text-slate-900 uppercase tracking-wider block">1. Executive Summary</span>
+              <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                Results-driven {result.candidateProfile.detectedRole} with verifiable track record in scaling operations and driving high-impact deliverables...
+              </p>
+            </div>
+
+            {/* Blurred Obfuscated Experience Section (Anti-Screenshot / Anti-Inspect) */}
+            <div className="text-left space-y-4 filter blur-[6px] select-none pointer-events-none opacity-60">
+              <span className="text-xs font-bold text-slate-900 uppercase tracking-wider block">2. Quantified Work Experience (X-Y-Z Formula)</span>
+              
+              <div className="p-3.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-800 space-y-2">
+                <p className="font-bold">• Spearheaded end-to-end multi-regional deliverables across 450+ enterprise benchmarks, yielding 48% efficiency gain.</p>
+                <p className="font-bold">• Orchestrated cross-functional governance pipelines, reducing revision latency from 4.8 hours to 30 minutes.</p>
+                <p className="font-bold">• Automated high-volume reporting dashboards in modern cloud suites, saving 12+ weekly operational hours.</p>
+                <p className="font-bold">• Directed liquidity and stakeholder communications for ₦65M+ transaction portfolio with zero discrepancy.</p>
+              </div>
+
+              <span className="text-xs font-bold text-slate-900 uppercase tracking-wider block pt-2">3. Tailored 1-Page Remote Cover Letter</span>
+              <div className="p-4 rounded-lg bg-white border border-slate-200 text-xs text-slate-600 leading-relaxed space-y-2">
+                <p>Dear Hiring Team, I am writing to express my enthusiastic interest in the remote role. With a proven background in driving high-efficiency operations and upholding stringent SLA benchmarks across global time zones...</p>
+                <p>In my previous engagements, I successfully managed cross-functional stakeholders and introduced workflow automations that reduced resolution latency by over 35%...</p>
+              </div>
+            </div>
+
+            {/* Centered High-Converting Lock Overlay */}
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 bg-slate-900/40 backdrop-blur-[2px]">
+              <div className="max-w-md w-full bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-2xl text-center space-y-4">
+                <div className="w-12 h-12 rounded-2xl bg-teal-50 border border-teal-200 text-teal-800 flex items-center justify-center mx-auto shadow-sm">
+                  <Lock className="w-6 h-6" />
+                </div>
+
+                <div>
+                  <h4 className="text-lg sm:text-xl font-extrabold text-slate-900">
+                    Unlock Full CV Rewrite & Cover Letter
+                  </h4>
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                    Instantly unblur all 20+ line-by-line metric-driven bullet points, full Naija-to-Global translation, and download your 1-click ATS PDF.
+                  </p>
+                </div>
+
+                <div className="py-2.5 px-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                  <div className="text-left">
+                    <span className="text-[10px] text-slate-400 line-through">₦10,000</span>
+                    <div className="text-2xl font-black text-slate-900">₦1,000</div>
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-200">
+                    Instant Download
+                  </span>
+                </div>
+
+                <button
+                  onClick={onUnlockPremium}
+                  className="w-full py-3.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all"
+                >
+                  <Lock className="w-4 h-4" />
+                  <span>Pay ₦1,000 & Download ATS PDF</span>
+                </button>
+
+                <p className="text-[11px] text-slate-400 font-medium">
+                  🔒 Paystack Secured • Card, Bank Transfer, USSD, OPay & PalmPay
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Section 6: Fintech Sponsor Banner */}
       <AdBanner slotType="fintech-sponsor" />
 
-      {/* Section 6: ₦1,000 Unlock Banner */}
+      {/* Section 7: ₦1,000 Unlock Banner */}
       {!isUnlocked && (
         <div className="rounded-2xl p-8 bg-slate-900 text-white shadow-lg text-center sm:text-left">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
