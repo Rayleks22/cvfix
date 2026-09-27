@@ -4,33 +4,32 @@
 
 @layer base {
   body {
-    @apply bg-[#080c14] text-slate-100 selection:bg-emerald-500 selection:text-white;
+    @apply bg-[#F8FAFC] text-slate-900 font-['Plus_Jakarta_Sans',sans-serif] selection:bg-teal-600 selection:text-white;
   }
 }
 
-.glass-card {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Modern Enterprise SaaS Styling */
+.card-clean {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
 }
 
-.glass-card-hover {
-  transition: all 0.2s ease-in-out;
+.card-hover {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.glass-card-hover:hover {
-  border-color: rgba(16, 185, 129, 0.4);
+.card-hover:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.15);
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 50%, #059669 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.badge-trust {
+  background-color: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #334155;
 }
 
-.gradient-text-gold {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.gradient-brand {
+  background: linear-gradient(135deg, #0F766E 0%, #047857 100%);
 }

@@ -176,50 +176,50 @@ export function App() {
 
         {activeTab === 'pricing' && (
           <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-            <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
-              Unbeatable Value
+            <span className="px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold">
+              Transparent Pricing
             </span>
-            <h2 className="text-4xl font-extrabold text-white mt-4">
-              Simple, Transparent Nigerian Pricing
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+              Invest in Your Career at Real Nigerian Rates
             </h2>
-            <p className="text-slate-300 text-sm mt-2 max-w-xl mx-auto">
-              Compare our ₦1,000 one-time career unlock against international tools charging $25/mo or local freelancers charging ₦20,000.
+            <p className="text-slate-600 text-sm mt-2 max-w-xl mx-auto">
+              Compare our ₦1,000 one-time career unlock against international tools charging $25/mo (~₦32,500) or local consultants charging ₦20,000.
             </p>
 
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
               {/* Free Tier */}
-              <div className="glass-card rounded-3xl p-8 border border-white/10 space-y-4">
-                <h4 className="text-lg font-bold text-white">Free Basic Audit</h4>
-                <div className="text-3xl font-black text-white">₦0</div>
-                <ul className="text-xs text-slate-300 space-y-2.5">
-                  <li>✅ Full ATS Score & Diagnostic Grade</li>
-                  <li>✅ 3 Critical Flaws & Explanation</li>
-                  <li>✅ 1 Free Sample Bullet Upgrade</li>
-                  <li>✅ Live Dollar Salary Valuation</li>
-                  <li>✅ Viral WhatsApp/X Score Badge</li>
+              <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm space-y-4">
+                <h4 className="text-base font-bold text-slate-900">Free Diagnostic Audit</h4>
+                <div className="text-3xl font-extrabold text-slate-900">₦0</div>
+                <ul className="text-xs text-slate-600 space-y-3">
+                  <li className="flex items-center gap-2">✅ Full ATS Score & Diagnostic Grade</li>
+                  <li className="flex items-center gap-2">✅ 3 Critical Flaws & Recruiter Feedback</li>
+                  <li className="flex items-center gap-2">✅ 1 Free Sample Bullet Upgrade</li>
+                  <li className="flex items-center gap-2">✅ International Dollar Salary Benchmark</li>
+                  <li className="flex items-center gap-2">✅ Shareable WhatsApp / LinkedIn Scorecard</li>
                 </ul>
               </div>
 
               {/* Paid Impulse Tier */}
-              <div className="glass-card rounded-3xl p-8 border-2 border-emerald-500/50 bg-emerald-950/20 space-y-4 relative">
-                <span className="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-emerald-500 text-white font-bold text-[10px] uppercase tracking-wider">
-                  Most Popular
+              <div className="bg-white rounded-2xl p-8 border-2 border-teal-800 shadow-md space-y-4 relative">
+                <span className="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-teal-800 text-white font-bold text-[10px] uppercase tracking-wider">
+                  Recommended
                 </span>
-                <h4 className="text-lg font-bold text-white">Full Career Unlock</h4>
+                <h4 className="text-base font-bold text-slate-900">Full Career Unlock Package</h4>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-black text-emerald-400">₦1,000</span>
-                  <span className="text-xs text-emerald-300">one-time</span>
+                  <span className="text-3xl sm:text-4xl font-extrabold text-slate-900">₦1,000</span>
+                  <span className="text-xs text-teal-800 font-semibold">one-time only (~$0.75)</span>
                 </div>
-                <ul className="text-xs text-slate-200 space-y-2.5">
-                  <li>✅ Everything in Free Audit</li>
-                  <li>✅ <strong>Complete Line-by-Line CV Rewrite</strong> (20+ Bullets)</li>
-                  <li>✅ <strong>Full Naija-to-Global Reframe</strong> (NYSC, HND, Local Exp)</li>
-                  <li>✅ <strong>Custom 1-Page Cover Letter</strong></li>
-                  <li>✅ <strong>1-Click ATS-Certified PDF Export</strong></li>
+                <ul className="text-xs text-slate-700 space-y-3">
+                  <li className="flex items-center gap-2">✅ Everything in Free Diagnostic Audit</li>
+                  <li className="flex items-center gap-2">✅ <strong>Complete Line-by-Line CV Rewrite</strong> (20+ Bullets)</li>
+                  <li className="flex items-center gap-2">✅ <strong>Full Naija-to-Global Translation</strong> (NYSC, HND, Local)</li>
+                  <li className="flex items-center gap-2">✅ <strong>Custom 1-Page Remote Cover Letter</strong></li>
+                  <li className="flex items-center gap-2">✅ <strong>1-Click Harvard Single-Page ATS PDF Export</strong></li>
                 </ul>
                 <button
                   onClick={() => setShowPaystackModal(true)}
-                  className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-xs shadow-lg shadow-emerald-500/30 transition-all active:scale-95"
+                  className="w-full py-3 rounded-xl bg-teal-800 hover:bg-teal-900 text-white font-bold text-xs shadow-sm transition-all active:scale-95"
                 >
                   Unlock for ₦1,000
                 </button>
