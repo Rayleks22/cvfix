@@ -52,24 +52,45 @@ export const HeroScanner: React.FC<HeroScannerProps> = ({ onStartAnalysis, isLoa
     setIsExtracting(true);
 
     try {
-      if (file.type === 'text/plain') {
-        const text = await file.text();
-        setCvText(text);
+      if (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') {
+        const arrayBuffer = await file.arrayBuffer();
+        // @ts-ignore
+        if (typeof window !== 'undefined' && window.pdfjsLib) {
+          // @ts-ignore
+          const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+          const pdf = await loadingTask.promise;
+          let extractedText = '';
+
+          for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+            const page = await pdf.getPage(pageNum);
+            const textContent = await page.getTextContent();
+            const pageItems = textContent.items.map((item: any) => item.str).join(' ');
+            extractedText += pageItems + '\n\n';
+          }
+
+          if (extractedText.trim().length > 20) {
+            setCvText(extractedText.trim());
+            setActiveInputTab('paste');
+            setIsExtracting(false);
+            return;
+          }
+        }
+      }
+
+      // Plain text or standard document fallback
+      const text = await file.text();
+      if (text && text.trim().length > 20 && !text.startsWith('%PDF')) {
+        setCvText(text.trim());
         setActiveInputTab('paste');
       } else {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const content = event.target?.result as string;
-          if (content) {
-            setCvText(content.length > 100 ? content : SAMPLE_NAIJA_CV);
-            setActiveInputTab('paste');
-          }
-        };
-        reader.readAsText(file);
+        const cleaned = text.replace(/[^\x20-\x7E\n\r\t]/g, ' ').replace(/\s+/g, ' ').trim();
+        if (cleaned.length > 30) {
+          setCvText(cleaned);
+          setActiveInputTab('paste');
+        }
       }
     } catch (err) {
-      setCvText(SAMPLE_NAIJA_CV);
-      setActiveInputTab('paste');
+      console.error("PDF Parsing error:", err);
     } finally {
       setIsExtracting(false);
     }

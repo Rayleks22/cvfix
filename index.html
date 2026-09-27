@@ -21,6 +21,14 @@
     
     <!-- Paystack Inline JS -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
+
+    <!-- PDF.js for fast client-side PDF text extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+      if (window.pdfjsLib) {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      }
+    </script>
   </head>
   <body class="bg-[#F8FAFC] text-slate-900 font-['Plus_Jakarta_Sans',sans-serif] antialiased selection:bg-teal-700 selection:text-white min-h-screen">
     <div id="root"></div>
