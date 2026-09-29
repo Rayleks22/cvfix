@@ -29,6 +29,72 @@
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
       }
     </script>
+
+    <!-- Schema.org Entity Graph (seo-graph standard) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://cvfix.com.ng/#app",
+          "name": "CVFix ATS CV Scanner & Global Career Engine",
+          "url": "https://cvfix.com.ng/",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "All",
+          "description": "Instant AI ATS resume scanner benchmarking Nigerian professionals against Fortune 500 & global remote standards.",
+          "offers": {
+            "@type": "Offer",
+            "price": "2500",
+            "priceCurrency": "NGN",
+            "availability": "https://schema.org/InStock"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://cvfix.com.ng/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How does CVFix benchmark my CV against global ATS systems?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "CVFix simulates enterprise Applicant Tracking Systems (Workday, Greenhouse, Lever, Taleo) to evaluate header readability, metric quantification (Google XYZ formula), keyword density, and formatting compliance."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How should Nigerian professionals present NYSC and local experience for international roles?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Rather than listing 'NYSC Corp Member', CVFix reframes this into functional corporate job titles (e.g. 'Associate Operations Specialist' or 'Graduate Project Analyst') emphasizing quantifiable achievements and business outcomes."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I scan my CV for free on CVFix?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! CVFix provides a 100% free ATS diagnostic score, structural audit, and salary benchmark instantly with no credit card required."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://cvfix.com.ng/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://cvfix.com.ng/"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
   <body class="bg-[#F8FAFC] text-slate-900 font-['Plus_Jakarta_Sans',sans-serif] antialiased selection:bg-teal-700 selection:text-white min-h-screen">
     <div id="root"></div>
