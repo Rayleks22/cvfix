@@ -100,26 +100,5 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
     "description": "Our organization is seeking content writers to create articles and blog posts on a variety of topics. The rate of pay is $20 per 100 words (this comes out to approximately $100 per...",
     "applyUrl": "https://remotive.com/remote-jobs/writing/freelance-writer-1185979",
     "isVerified": true
-  },
-  {
-    "id": "remotive-1749306",
-    "title": "Freelance Copywriter",
-    "company": "Coalition Technologies ",
-    "category": "Content & Writing",
-    "salaryUSD": "$20k -$35k",
-    "salaryNaira": "₦2,645,500/mo",
-    "location": "Worldwide",
-    "type": "freelance",
-    "tags": [
-      "accounting",
-      "excel",
-      "research",
-      "data analysis",
-      "bookkeeping"
-    ],
-    "postedTime": "Verified Today",
-    "description": "CT Marketing Agency is seeking skilled Freelance Copywriters to write high-quality, SEO-driven content for eCommerce and lead generation websites. This is a freelance, project-base...",
-    "applyUrl": "https://remotive.com/remote-jobs/writing/freelance-copywriter-1749306",
-    "isVerified": true
   }
 ];
