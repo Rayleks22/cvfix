@@ -1,65 +1,98 @@
-export interface CriticalFlag {
-  type: 'error' | 'warning' | 'improvement';
+export type TabName =
+  'scanner' | 'jobs' | 'pricing' | 'privacy' | 'terms' | 'contact' | 'refunds' | 'methodology';
+
+export interface ReviewInput {
+  cvText: string;
+  targetRole: string;
+  jobDescription: string;
+}
+
+export interface ScorePillar {
+  id: string;
+  label: string;
+  score: number;
+  explanation: string;
+}
+
+export interface ReviewSuggestion {
+  id: string;
   title: string;
   description: string;
-  before: string;
-  after: string;
+  excerpt?: string;
+  revision?: string;
+  priority: 'high' | 'medium' | 'low';
 }
 
-export interface MatchedJob {
-  title: string;
-  companyType: string;
-  salaryUSD: string;
-  salaryNaira: string;
-  matchPercentage: number;
-  whyFit: string;
+export interface TextChange {
+  lineIndex: number;
+  original: string;
+  revised: string;
+  reason: string;
 }
 
-export interface AnalysisResult {
-  atsScore: number;
-  grade: string;
-  summaryRating: string;
-  scores: {
-    parseability: number;
-    impactMetrics: number;
-    buzzwordSlopPenalty: number;
-    naijaToGlobalTranslation: number;
-  };
-  candidateProfile: {
-    detectedRole: string;
-    experienceLevel: string;
-    estimatedRemoteSalaryUSD: string;
-    estimatedSalaryNaira: string;
-  };
-  criticalFlags: CriticalFlag[];
-  missingKeywords: string[];
-  freeSampleRewrite: {
-    originalBullet: string;
-    upgradedBullet: string;
-    explanation: string;
-  };
-  matchedRemoteJobs: MatchedJob[];
-  premiumFullRewrite: {
-    professionalSummary: string;
-    experienceBullets: string[];
-    hardSkills: string[];
-    coverLetter: string;
-  };
-  viralShareText: string;
+export interface ReviewResult {
+  score: number;
+  scoreLabel: string;
+  candidateName: string;
+  targetRole: string;
+  wordCount: number;
+  pillars: ScorePillar[];
+  strengths: string[];
+  suggestions: ReviewSuggestion[];
+  keywordMatches: string[];
+  keywordGaps: string[];
+  keywordSource: 'job-description' | 'role-ideas' | 'none';
+  sampleRewrite: TextChange | null;
+  followUpQuestions: string[];
+  method: 'rules-v2';
 }
+
+export interface PremiumPackage {
+  cvText: string;
+  coverLetter: string;
+  changes: TextChange[];
+  candidateName: string;
+  targetRole: string;
+  method: 'rules-v2';
+}
+
+export interface PublicConfig {
+  paymentsEnabled: boolean;
+  paymentMode: 'test' | 'live' | 'unavailable';
+  supportEmail: string | null;
+  priceKobo: number;
+  currency: 'NGN';
+}
+
+export type JobCategory =
+  | 'Virtual Assistant'
+  | 'Customer Support'
+  | 'Tech & Engineering'
+  | 'Data & AI'
+  | 'Content & Writing'
+  | 'Sales & Marketing'
+  | 'Other';
 
 export interface RemoteJobListing {
   id: string;
   title: string;
   company: string;
-  category: 'Virtual Assistant' | 'Customer Support' | 'Tech & Engineering' | 'Data & AI' | 'Content & Writing';
-  salaryUSD: string;
-  salaryNaira: string;
+  category: JobCategory;
+  salary: string | null;
   location: string;
-  type: 'Full-time' | 'Part-time' | 'Contract';
+  type: string;
   tags: string[];
-  postedTime: string;
+  publishedAt: string | null;
+  fetchedAt: string | null;
   description: string;
   applyUrl: string;
-  isVerified: boolean;
+  source: 'Remotive';
+}
+
+export interface VerifiedPayment {
+  verified: true;
+  reference: string;
+  package: PremiumPackage;
+  review: ReviewResult;
+  source: ReviewInput;
 }

@@ -1,85 +1,172 @@
-import React from 'react';
-import { FileCheck, Briefcase, Sparkles, ShieldCheck, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowUpRight, FileCheck2, Menu, X } from 'lucide-react';
+import type { TabName } from '../types/index.ts';
 
-interface HeaderProps {
-  activeTab: 'scanner' | 'jobs' | 'pricing';
-  setActiveTab: (tab: 'scanner' | 'jobs' | 'pricing') => void;
-}
-
-export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
+export function Brand() {
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
-      {/* Main Navbar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand Logo */}
-          <div 
-            onClick={() => setActiveTab('scanner')}
-            className="flex items-center space-x-3 cursor-pointer group"
+    <span className="brand">
+      <span className="brand-mark">
+        <FileCheck2 size={21} strokeWidth={1.8} />
+      </span>
+      <span className="brand-word">
+        cv<span>fix</span>
+        <span className="brand-dot">.</span>
+      </span>
+    </span>
+  );
+}
+export function Header({
+  activeTab,
+  onNavigate,
+  onStart,
+  onHowItWorks,
+}: {
+  activeTab: TabName;
+  onNavigate: (tab: TabName) => void;
+  onStart: () => void;
+  onHowItWorks: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const go = (tab: TabName) => {
+    setOpen(false);
+    onNavigate(tab);
+  };
+  return (
+    <>
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
+      <header className="site-header">
+        <div className="container header-inner">
+          <a
+            href="/"
+            aria-label="CVFix home"
+            onClick={(event) => {
+              if (!event.ctrlKey && !event.metaKey) {
+                event.preventDefault();
+                go('scanner');
+              }
+            }}
           >
-            <div className="w-9 h-9 rounded-xl bg-teal-800 flex items-center justify-center shadow-sm group-hover:bg-teal-700 transition-colors">
-              <FileCheck className="w-5 h-5 text-white stroke-[2.5]" />
-            </div>
-            <div>
-              <div className="text-xl font-extrabold tracking-tight text-slate-900 flex items-center">
-                CVFix<span className="text-teal-700 font-black">.com.ng</span>
-              </div>
-              <span className="text-[10px] block text-slate-500 font-semibold tracking-wider uppercase -mt-0.5">
-                AI ATS & Career Intelligence
-              </span>
-            </div>
-          </div>
-
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1">
-            <button
-              onClick={() => setActiveTab('scanner')}
-              className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                activeTab === 'scanner'
-                  ? 'text-teal-800 bg-teal-50 border border-teal-200/60'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-              }`}
+            <Brand />
+          </a>
+          <nav className="desktop-nav" aria-label="Main navigation">
+            <a
+              className={activeTab === 'scanner' ? 'active' : ''}
+              href="/"
+              onClick={(event) => {
+                event.preventDefault();
+                go('scanner');
+              }}
             >
-              ATS Diagnostic Scanner
-            </button>
-            <button
-              onClick={() => setActiveTab('jobs')}
-              className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${
-                activeTab === 'jobs'
-                  ? 'text-teal-800 bg-teal-50 border border-teal-200/60'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-              }`}
+              CV checker
+            </a>
+            <a
+              href="/#how-it-works"
+              onClick={(event) => {
+                event.preventDefault();
+                onHowItWorks();
+              }}
             >
-              <Briefcase className="w-4 h-4 text-teal-700" />
-              <span>Dollar Remote Jobs</span>
-              <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">
-                ACTIVE
-              </span>
-            </button>
-            <button
-              onClick={() => setActiveTab('pricing')}
-              className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                activeTab === 'pricing'
-                  ? 'text-teal-800 bg-teal-50 border border-teal-200/60'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-              }`}
+              How it works
+            </a>
+            <a
+              className={activeTab === 'jobs' ? 'active' : ''}
+              href="/jobs"
+              onClick={(event) => {
+                event.preventDefault();
+                go('jobs');
+              }}
             >
-              ₦1,000 Micro-Unlock
-            </button>
+              Remote jobs
+            </a>
+            <a
+              className={activeTab === 'pricing' ? 'active' : ''}
+              href="/pricing"
+              onClick={(event) => {
+                event.preventDefault();
+                go('pricing');
+              }}
+            >
+              Pricing
+            </a>
           </nav>
-
-          {/* Action Button */}
-          <div className="flex items-center space-x-3">
+          <div className="header-actions">
             <button
-              onClick={() => setActiveTab('scanner')}
-              className="bg-teal-800 hover:bg-teal-900 text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-sm transition-all flex items-center gap-1.5 active:scale-95"
+              className="button button-primary header-cta"
+              onClick={() => {
+                setOpen(false);
+                onStart();
+              }}
             >
-              <Sparkles className="w-3.5 h-3.5 text-teal-200" />
-              <span>Free ATS Audit</span>
+              Check my CV <ArrowUpRight size={16} />
+            </button>
+            <button
+              className="icon-button mobile-menu-toggle"
+              aria-label={open ? 'Close navigation' : 'Open navigation'}
+              aria-expanded={open}
+              aria-controls="mobile-navigation"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
-      </div>
-    </header>
+        {open && (
+          <nav
+            className="mobile-nav container"
+            id="mobile-navigation"
+            aria-label="Mobile navigation"
+          >
+            <a
+              href="/"
+              onClick={(event) => {
+                event.preventDefault();
+                go('scanner');
+              }}
+            >
+              CV checker
+            </a>
+            <a
+              href="/#how-it-works"
+              onClick={(event) => {
+                event.preventDefault();
+                setOpen(false);
+                onHowItWorks();
+              }}
+            >
+              How it works
+            </a>
+            <a
+              href="/jobs"
+              onClick={(event) => {
+                event.preventDefault();
+                go('jobs');
+              }}
+            >
+              Remote jobs
+            </a>
+            <a
+              href="/pricing"
+              onClick={(event) => {
+                event.preventDefault();
+                go('pricing');
+              }}
+            >
+              Pricing
+            </a>
+            <a
+              href="/contact"
+              onClick={(event) => {
+                event.preventDefault();
+                go('contact');
+              }}
+            >
+              Help & contact
+            </a>
+          </nav>
+        )}
+      </header>
+    </>
   );
-};
+}

@@ -1,264 +1,362 @@
-import React, { useState } from 'react';
-import { Upload, FileText, Sparkles, CheckCircle2, ArrowRight, ShieldCheck, Zap, Globe, DollarSign, Award } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  ChevronDown,
+  FileText,
+  LoaderCircle,
+  LockKeyhole,
+  Upload,
+  X,
+} from 'lucide-react';
+import type { ReviewInput } from '../types/index.ts';
+import { extractCV } from '../lib/files.ts';
+import { MAX_CV_CHARS, MAX_JOB_CHARS, MAX_ROLE_CHARS } from '../lib/constants.ts';
+import { validateReviewInput } from '../lib/review.ts';
 
-interface HeroScannerProps {
-  onStartAnalysis: (text: string, targetRole: string) => void;
+export function HeroScanner({
+  input,
+  onInputChange,
+  onStartAnalysis,
+  onTrySample,
+  isLoading,
+}: {
+  input: ReviewInput;
+  onInputChange: (input: ReviewInput) => void;
+  onStartAnalysis: (input: ReviewInput) => void;
+  onTrySample: () => void;
   isLoading: boolean;
-}
-
-const SAMPLE_NAIJA_CV = `CHIDERA EMMANUEL OKECHUKWU
-Lagos, Nigeria | +234 803 123 4567 | chidera.e@gmail.com | LinkedIn: /in/chidera-emmanuel
-
-PROFESSIONAL SUMMARY
-Hardworking and dedicated Customer Support Officer with 3 years of experience in retail, agency banking, and customer service. Looking for a challenging remote role in a fast-paced environment to utilize my strong communication skills.
-
-WORK EXPERIENCE
-Customer Service & POS Operations Officer — QuickCash FinTech Agency, Ikeja, Lagos (2022 – Present)
-- Responsible for daily customer service and addressing customer complaints.
-- Handled cash withdrawals, deposits, and bill payments using POS terminals.
-- Reconciled daily sales and balanced cash book at the end of each business day.
-- Communicated with customers via WhatsApp and phone calls to resolve transfer failure issues.
-
-NYSC Corps Member (Administrative & Teaching Assistant) — Community Secondary School, Oyo State (2021 – 2022)
-- Served as a Corps Member under the mandatory NYSC scheme.
-- Taught computer studies and basic science to JSS 2 and JSS 3 students.
-- Assisted the vice-principal in organizing student records, test scores, and term reports.
-- Participated actively in community development service (CDS) sanitation projects.
-
-Retail Sales Assistant — MegaPlaza Stores, Victoria Island, Lagos (2019 – 2021)
-- Attended to walk-in customers and helped them locate merchandise.
-- Counted physical inventory and reported low-stock items to the store manager.
-- Operated the cash register and processed debit card payments.
-
-EDUCATION & CERTIFICATIONS
-- Higher National Diploma (HND) in Business Administration — Yaba College of Technology (Upper Credit)
-- Certificate of National Service — National Youth Service Corps (NYSC)
-
-SKILLS & TOOLS
-- Microsoft Word, Excel, POS Terminals, Customer Care, Teamwork, Communication, Problem Solving.`;
-
-export const HeroScanner: React.FC<HeroScannerProps> = ({ onStartAnalysis, isLoading }) => {
-  const [activeInputTab, setActiveInputTab] = useState<'upload' | 'paste'>('upload');
-  const [cvText, setCvText] = useState('');
-  const [targetRole, setTargetRole] = useState('');
+}) {
+  const [tab, setTab] = useState<'upload' | 'paste'>(input.cvText ? 'paste' : 'upload');
   const [fileName, setFileName] = useState('');
-  const [isExtracting, setIsExtracting] = useState(false);
-
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setFileName(file.name);
-    setIsExtracting(true);
-
+  const [extracting, setExtracting] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [error, setError] = useState('');
+  const [confirmed, setConfirmed] = useState(false);
+  const [tailorOpen, setTailorOpen] = useState(Boolean(input.targetRole || input.jobDescription));
+  const extractionId = useRef(0);
+  const currentInput = useRef(input);
+  currentInput.current = input;
+  useEffect(
+    () => () => {
+      extractionId.current += 1;
+    },
+    [],
+  );
+  const inputRef = useRef<HTMLInputElement>(null);
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  const updateText = (text: string) => {
+    setConfirmed(false);
+    setError('');
+    onInputChange({ ...input, cvText: text });
+  };
+  async function upload(file: File) {
+    const id = ++extractionId.current;
+    setError('');
+    setConfirmed(false);
+    setExtracting(true);
+    setFileName('');
+    onInputChange({ ...input, cvText: '' });
     try {
-      if (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') {
-        const arrayBuffer = await file.arrayBuffer();
-        // @ts-ignore
-        if (typeof window !== 'undefined' && window.pdfjsLib) {
-          // @ts-ignore
-          const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
-          const pdf = await loadingTask.promise;
-          let extractedText = '';
-
-          for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-            const page = await pdf.getPage(pageNum);
-            const textContent = await page.getTextContent();
-            const pageItems = textContent.items.map((item: any) => item.str).join(' ');
-            extractedText += pageItems + '\n\n';
-          }
-
-          if (extractedText.trim().length > 20) {
-            setCvText(extractedText.trim());
-            setActiveInputTab('paste');
-            setIsExtracting(false);
-            return;
-          }
-        }
-      }
-
-      // Plain text or standard document fallback
-      const text = await file.text();
-      if (text && text.trim().length > 20 && !text.startsWith('%PDF')) {
-        setCvText(text.trim());
-        setActiveInputTab('paste');
-      } else {
-        const cleaned = text.replace(/[^\x20-\x7E\n\r\t]/g, ' ').replace(/\s+/g, ' ').trim();
-        if (cleaned.length > 30) {
-          setCvText(cleaned);
-          setActiveInputTab('paste');
-        }
-      }
+      const cvText = await extractCV(file);
+      if (id !== extractionId.current) return;
+      onInputChange({ ...currentInput.current, cvText });
+      setConfirmed(false);
+      setFileName(file.name);
+      setTab('paste');
     } catch (err) {
-      console.error("PDF Parsing error:", err);
+      if (id === extractionId.current)
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'This document could not be read. Please try another format.',
+        );
     } finally {
-      setIsExtracting(false);
+      if (id === extractionId.current) setExtracting(false);
+      if (inputRef.current) inputRef.current.value = '';
     }
-  };
-
-  const handleScanSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const finalContent = cvText.trim() || SAMPLE_NAIJA_CV;
-    onStartAnalysis(finalContent, targetRole);
-  };
-
-  const loadSampleCV = () => {
-    setCvText(SAMPLE_NAIJA_CV);
-    setTargetRole("Remote Customer Support & Operations Specialist ($1,500/mo)");
-    setActiveInputTab('paste');
-  };
-
+  }
+  function submit(event: React.FormEvent) {
+    event.preventDefault();
+    setError('');
+    try {
+      validateReviewInput(input);
+      if (!confirmed)
+        throw new Error('Please check the CV text and confirm it is correct before continuing.');
+      onStartAnalysis(input);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Please check your CV text.');
+      if (tab === 'paste') textRef.current?.focus();
+    }
+  }
   return (
-    <div className="pt-10 pb-16 bg-gradient-to-b from-slate-50 via-white to-slate-50 border-b border-slate-200">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Institutional Trust Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold mb-6 shadow-sm">
-          <Award className="w-3.5 h-3.5 text-teal-700" />
-          <span>Benchmarked Against Workday, Taleo & Greenhouse ATS Rules</span>
+    <section className="hero-section">
+      <div className="container hero-grid">
+        <div className="hero-copy">
+          <div className="eyebrow">
+            <span className="status-dot" /> YOUR NEXT CHAPTER STARTS HERE
+          </div>
+          <h1>
+            Good experience.
+            <br />A <em>better CV.</em>
+          </h1>
+          <p className="hero-description">
+            You’ve done the work. Let’s help your CV show it. Get clear feedback and stronger
+            wording for your next opportunity.
+          </p>
+          <div className="hero-benefits">
+            <span>
+              <Check size={16} /> Free, practical feedback
+            </span>
+            <span>
+              <Check size={16} /> Built for Nigerian jobseekers
+            </span>
+            <span>
+              <Check size={16} /> Your facts stay yours
+            </span>
+          </div>
+          <button className="text-button hero-sample" onClick={onTrySample}>
+            See a sample review <ArrowUpRight size={18} />
+          </button>
+          <div className="hero-note">
+            <span className="note-icon">
+              <FileText size={19} />
+            </span>
+            <p>
+              First job. Career change. Next big move.
+              <br />
+              <strong>Make your experience easier to understand.</strong>
+            </p>
+          </div>
         </div>
-
-        {/* Hero Headline */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.18]">
-          Optimize Your Nigerian CV for <br className="hidden sm:inline" />
-          <span className="text-teal-800">Global Remote Roles</span> & High-Tier Placement
-        </h1>
-
-        {/* Hero Subtitle */}
-        <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          Get an immediate ATS compatibility diagnostic. Automatically reframe <strong>NYSC, local degrees, and Nigerian corporate experience</strong> into international, metric-driven achievements.
-        </p>
-
-        {/* Pillar Badges */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-slate-600 font-medium">
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-teal-700" />
-            <span>Objective 0–100 ATS Score</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Globe className="w-4 h-4 text-teal-700" />
-            <span>Naija-to-Global Reframe</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <DollarSign className="w-4 h-4 text-teal-700" />
-            <span>USD Salary Benchmark</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-teal-700" />
-            <span>100% Confidential</span>
-          </div>
-        </div>
-
-        {/* Scanner Card */}
-        <div className="mt-10 max-w-3xl mx-auto bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 text-left">
-          {/* Tab Selector */}
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
-            <div className="flex items-center space-x-2 bg-slate-100 p-1 rounded-xl">
-              <button
-                type="button"
-                onClick={() => setActiveInputTab('upload')}
-                className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all ${
-                  activeInputTab === 'upload'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Upload className="w-4 h-4 text-teal-700" />
-                <span>Upload Document (PDF / Word)</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveInputTab('paste')}
-                className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all ${
-                  activeInputTab === 'paste'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <FileText className="w-4 h-4 text-teal-700" />
-                <span>Paste CV Text</span>
-              </button>
+        <div className="scanner-wrap">
+          <form
+            className="scanner-card"
+            id="cv-checker"
+            onSubmit={submit}
+            noValidate
+            aria-label="Free CV review"
+          >
+            <div className="scanner-heading">
+              <div>
+                <span className="eyebrow small">LET’S START WITH YOUR CV</span>
+                <h2>Your next step, made simple.</h2>
+              </div>
+              <span className="free-tag">FREE</span>
             </div>
-
+            <div className="input-tabs" role="tablist" aria-label="How to add your CV">
+              {(['upload', 'paste'] as const).map((value) => (
+                <button
+                  key={value}
+                  type="button"
+                  role="tab"
+                  disabled={extracting}
+                  id={`${value}-tab`}
+                  aria-selected={tab === value}
+                  aria-controls="cv-input-panel"
+                  tabIndex={tab === value ? 0 : -1}
+                  className={tab === value ? 'selected' : ''}
+                  onClick={() => setTab(value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                      event.preventDefault();
+                      const next = tab === 'upload' ? 'paste' : 'upload';
+                      setTab(next);
+                      document.getElementById(`${next}-tab`)?.focus();
+                    }
+                  }}
+                >
+                  {value === 'upload' ? <Upload size={16} /> : <FileText size={16} />}
+                  {value === 'upload' ? 'Upload CV' : 'Paste text'}
+                </button>
+              ))}
+            </div>
+            <div id="cv-input-panel" role="tabpanel" aria-labelledby={`${tab}-tab`}>
+              {tab === 'upload' ? (
+                <div
+                  className={`dropzone ${dragging ? 'dragging' : ''}`}
+                  onDragOver={(event) => {
+                    event.preventDefault();
+                    setDragging(true);
+                  }}
+                  onDragLeave={() => setDragging(false)}
+                  onDrop={(event) => {
+                    event.preventDefault();
+                    setDragging(false);
+                    if (event.dataTransfer.files[0]) void upload(event.dataTransfer.files[0]);
+                  }}
+                >
+                  <span className="upload-icon">
+                    {extracting ? (
+                      <LoaderCircle size={24} className="spin" />
+                    ) : (
+                      <Upload size={24} />
+                    )}
+                  </span>
+                  <strong>
+                    {extracting
+                      ? 'Reading your document…'
+                      : input.cvText
+                        ? 'Choose a different CV'
+                        : 'Drop your CV here'}
+                  </strong>
+                  <span className="dropzone-or">
+                    or{' '}
+                    <button
+                      type="button"
+                      className="inline-link"
+                      disabled={extracting}
+                      onClick={() => inputRef.current?.click()}
+                    >
+                      choose a file
+                    </button>
+                  </span>
+                  <span className="file-help">PDF, DOCX or TXT · up to 5 MB</span>
+                  <input
+                    ref={inputRef}
+                    className="visually-hidden"
+                    type="file"
+                    accept=".pdf,.docx,.txt"
+                    aria-label="Upload your CV file"
+                    disabled={extracting}
+                    onChange={(event) => {
+                      if (event.target.files?.[0]) void upload(event.target.files[0]);
+                    }}
+                  />
+                  {input.cvText && (
+                    <button type="button" className="text-button" onClick={() => setTab('paste')}>
+                      View your CV text <ArrowRight size={14} />
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className="paste-panel">
+                  <div className="text-panel-label">
+                    <label htmlFor="cv-text">
+                      {fileName ? 'Check the extracted text' : 'Your CV text'}
+                    </label>
+                    {fileName && (
+                      <span className="file-chip" title={fileName}>
+                        <FileText size={12} />
+                        {fileName}
+                      </span>
+                    )}
+                  </div>
+                  <textarea
+                    id="cv-text"
+                    disabled={extracting}
+                    ref={textRef}
+                    value={input.cvText}
+                    maxLength={MAX_CV_CHARS}
+                    onChange={(event) => updateText(event.target.value)}
+                    placeholder="Paste your name, contact details, experience, education and skills here…"
+                    rows={7}
+                    aria-describedby="cv-text-help"
+                    spellCheck
+                  />
+                  <div className="text-panel-meta">
+                    <span id="cv-text-help">Check names, dates and any extracted text.</span>
+                    <span>{input.cvText.length.toLocaleString()} / 30,000</span>
+                  </div>
+                </div>
+              )}
+            </div>
             <button
               type="button"
-              onClick={loadSampleCV}
-              className="text-xs text-teal-800 hover:text-teal-900 font-semibold underline decoration-teal-300"
+              className="tailor-toggle"
+              aria-expanded={tailorOpen}
+              aria-controls="tailor-fields"
+              onClick={() => setTailorOpen(!tailorOpen)}
             >
-              Load Sample Nigerian CV
-            </button>
-          </div>
-
-          <form onSubmit={handleScanSubmit}>
-            {/* Target Role Input */}
-            <div className="mb-4">
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Target Role / Industry Specialization (Optional):
-              </label>
-              <input
-                type="text"
-                placeholder="e.g. Remote Customer Success Specialist, Virtual Assistant, Junior Developer, Operations..."
-                value={targetRole}
-                onChange={(e) => setTargetRole(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-teal-700 focus:bg-white transition-colors"
-              />
-            </div>
-
-            {/* Upload Area */}
-            {activeInputTab === 'upload' && (
-              <div className="border-2 border-dashed border-slate-200 hover:border-teal-700 rounded-2xl p-8 text-center transition-all bg-slate-50/50 hover:bg-slate-50 group cursor-pointer relative">
-                <input
-                  type="file"
-                  accept=".pdf,.doc,.docx,.txt"
-                  onChange={handleFileUpload}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                />
-                <div className="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200/60 flex items-center justify-center mx-auto mb-3 group-hover:scale-105 transition-transform">
-                  <Upload className="w-6 h-6 text-teal-800" />
-                </div>
-                <p className="text-sm font-bold text-slate-800">
-                  {fileName ? `Selected: ${fileName}` : "Click to select or drag and drop your CV file"}
-                </p>
-                <p className="text-xs text-slate-500 mt-1">
-                  Supports PDF, DOCX, DOC, or TXT formats (Up to 5MB)
-                </p>
-                <div className="mt-3 inline-block px-3 py-1 rounded-md bg-white border border-slate-200 text-[11px] text-slate-500 font-medium">
-                  🔒 Document parsed locally. Zero data stored or retained.
-                </div>
-              </div>
-            )}
-
-            {/* Paste Area */}
-            {activeInputTab === 'paste' && (
-              <div>
-                <textarea
-                  rows={8}
-                  placeholder="Paste your CV text here (Summary, Work History, Education, Skills)..."
-                  value={cvText}
-                  onChange={(e) => setCvText(e.target.value)}
-                  className="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-xs sm:text-sm font-sans focus:outline-none focus:border-teal-700 focus:bg-white transition-colors resize-y leading-relaxed"
-                />
-              </div>
-            )}
-
-            {/* Action Bar */}
-            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100">
-              <span className="text-xs text-slate-500 flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-teal-700" />
-                Free Diagnostic Evaluation & Bullet Upgrade
+              <span>
+                Applying for a specific job? <small>Optional</small>
               </span>
-              <button
-                type="submit"
-                disabled={isLoading || isExtracting}
-                className="w-full sm:w-auto px-7 py-3 rounded-xl bg-teal-800 hover:bg-teal-900 text-white font-bold text-sm shadow-sm flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50"
-              >
-                <Sparkles className="w-4 h-4 text-teal-200" />
-                <span>Run Free ATS Diagnostic</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+              <ChevronDown size={16} className={tailorOpen ? 'rotate' : ''} />
+            </button>
+            {tailorOpen && (
+              <div className="tailor-fields" id="tailor-fields">
+                <label htmlFor="target-role">Target role</label>
+                <input
+                  id="target-role"
+                  value={input.targetRole}
+                  maxLength={MAX_ROLE_CHARS}
+                  placeholder="e.g. Customer Support Officer"
+                  onChange={(event) => onInputChange({ ...input, targetRole: event.target.value })}
+                />
+                <label htmlFor="job-description">Job description</label>
+                <textarea
+                  id="job-description"
+                  value={input.jobDescription}
+                  maxLength={MAX_JOB_CHARS}
+                  rows={4}
+                  placeholder="Paste the actual job description for a more relevant keyword check."
+                  onChange={(event) =>
+                    onInputChange({ ...input, jobDescription: event.target.value })
+                  }
+                />
+                <p className="field-help">
+                  We’ll show relevant skill gaps. We won’t add skills you haven’t supplied.
+                </p>
+              </div>
+            )}
+            {input.cvText.trim() && (
+              <label className="checkbox-label source-confirmation">
+                <input
+                  type="checkbox"
+                  checked={confirmed}
+                  onChange={(event) => setConfirmed(event.target.checked)}
+                />
+                <span>I’ve checked the text and it accurately reflects my CV.</span>
+              </label>
+            )}
+            {error && (
+              <div className="form-error" role="alert">
+                <span>{error}</span>
+                <button
+                  type="button"
+                  className="icon-button"
+                  aria-label="Dismiss error"
+                  onClick={() => setError('')}
+                >
+                  <X size={15} />
+                </button>
+              </div>
+            )}
+            <button
+              type="submit"
+              className="button button-primary scanner-submit"
+              disabled={extracting || isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <LoaderCircle size={17} className="spin" /> Checking your CV…
+                </>
+              ) : (
+                <>
+                  Check my CV free <ArrowRight size={17} />
+                </>
+              )}
+            </button>
+            <p className="scanner-privacy">
+              <LockKeyhole size={12} /> Free review happens in your browser. No sign-up.
+            </p>
           </form>
+          <div className="scanner-caption">
+            <span>Start free. Make it yours.</span>
+            <span>
+              Full CV package <strong>₦1,000</strong> · one time
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+      <div className="container fit-strip">
+        <span>A LITTLE CLARITY GOES A LONG WAY.</span>
+        <p>
+          For local opportunities <i /> For remote roles <i /> For your next move
+        </p>
+        <span className="fit-strip-end">YOUR EXPERIENCE, NOT A TEMPLATE.</span>
+      </div>
+    </section>
   );
-};
+}

@@ -1,7 +1,10 @@
 name = "cvfix"
 pages_build_output_dir = "dist"
-compatibility_date = "2024-09-01"
+compatibility_date = "2026-10-02"
 
 [vars]
-ENVIRONMENT = "production"
-# GEMINI_API_KEY can be set in Cloudflare Dashboard -> Pages -> Settings -> Environment Variables
+APP_URL = "https://cvfix.com.ng"
+# Runtime secrets: SESSION_SECRET, PAYSTACK_SECRET_KEY
+# Runtime variable: SUPPORT_EMAIL (a real, monitored address)
+# Paid checkout fails closed until all four settings are valid.
+# See README.md for test-mode setup and the production checklist.

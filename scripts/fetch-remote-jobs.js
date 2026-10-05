@@ -1,97 +1,98 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const USD_TO_NAIRA_RATE = 1300;
-
-function mapCategory(cat, title) {
-  const combined = `${cat} ${title}`.toLowerCase();
-  if (/dev|software|engineer|frontend|backend|fullstack|react|python|web/i.test(combined)) return 'Tech & Engineering';
-  if (/customer|support|success|helpdesk|client service/i.test(combined)) return 'Customer Support';
-  if (/assistant|admin|operations|executive|project/i.test(combined)) return 'Virtual Assistant';
-  if (/data|ai|annotation|analytics|machine learning|prompt/i.test(combined)) return 'Data & AI';
-  return 'Content & Writing';
+export function mapCategory(category = '', title = '') {
+  const text = `${title} ${category}`.toLowerCase();
+  if (/data (?:analyst|analytics|engineer|scientist)|machine learning|annotation/.test(text))
+    return 'Data & AI';
+  if (/software|developer|frontend|backend|fullstack|devops|engineer/.test(text))
+    return 'Tech & Engineering';
+  if (/customer|support|success|helpdesk/.test(text)) return 'Customer Support';
+  if (/assistant|administrat|operations|executive assistant/.test(text)) return 'Virtual Assistant';
+  if (/writer|copywrit|editor|journalis|writing|content/.test(text)) return 'Content & Writing';
+  if (/sales|marketing|account executive/.test(text)) return 'Sales & Marketing';
+  return 'Other';
 }
-
-function estimateSalaryUSD(category) {
-  switch (category) {
-    case 'Tech & Engineering': return '$2,500/mo';
-    case 'Data & AI': return '$1,800/mo';
-    case 'Content & Writing': return '$1,600/mo';
-    case 'Virtual Assistant': return '$1,500/mo';
-    case 'Customer Support': return '$1,400/mo';
-    default: return '$1,500/mo';
-  }
-}
-
-function formatNaira(usdString) {
-  const num = parseInt(usdString.replace(/[^0-9]/g, ''), 10) || 1500;
-  const totalNaira = num * USD_TO_NAIRA_RATE;
-  return `₦${totalNaira.toLocaleString()}/mo`;
-}
-
-async function syncRemoteJobs() {
-  console.log("🌐 Fetching live worldwide remote job feeds...");
-
+function safeURL(value) {
   try {
-    const res = await fetch('https://remotive.com/api/remote-jobs?limit=50');
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    
-    const data = await res.json();
-    const allJobs = data.jobs || [];
-
-    // Filter jobs accessible to African / Nigerian remote candidates
-    const globalJobs = allJobs.filter((job) => {
-      const loc = (job.candidate_required_location || '').toLowerCase();
-      return (
-        loc.includes('worldwide') ||
-        loc.includes('anywhere') ||
-        loc.includes('africa') ||
-        loc.includes('emea') ||
-        loc === ''
-      );
-    });
-
-    console.log(`Found ${globalJobs.length} worldwide / Africa-friendly roles.`);
-
-    const formattedJobs = globalJobs.slice(0, 15).map((job, idx) => {
-      const category = mapCategory(job.category || '', job.title || '');
-      const salaryUSD = job.salary ? job.salary : estimateSalaryUSD(category);
-      const salaryNaira = formatNaira(salaryUSD);
-      const cleanDesc = (job.description || '')
-        .replace(/<[^>]*>?/gm, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-        .slice(0, 180) + '...';
-
-      return {
-        id: `remotive-${job.id || idx}`,
-        title: job.title,
-        company: job.company_name || 'Global Tech Partner',
-        category: category,
-        salaryUSD: salaryUSD,
-        salaryNaira: salaryNaira,
-        location: job.candidate_required_location || '100% Remote (Open to Nigeria)',
-        type: (job.job_type || 'Full-time').replace('_', ' '),
-        tags: job.tags && job.tags.length > 0 ? job.tags.slice(0, 5) : ['Remote', 'Global', 'Africa-Friendly'],
-        postedTime: 'Verified Today',
-        description: cleanDesc,
-        applyUrl: job.url || 'https://remotive.com',
-        isVerified: true
-      };
-    });
-
-    const targetPath = path.resolve(__dirname, '../src/data/mockJobs.ts');
-    const fileContent = `import { RemoteJobListing } from '../types';\n\nexport const CURATED_REMOTE_JOBS: RemoteJobListing[] = ${JSON.stringify(formattedJobs, null, 2)};\n`;
-
-    fs.writeFileSync(targetPath, fileContent, 'utf-8');
-    console.log(`✅ Successfully updated ${formattedJobs.length} live remote jobs in src/data/mockJobs.ts!`);
-  } catch (error) {
-    console.error("⚠️ Failed to sync live jobs from API:", error.message);
+    const url = new URL(value);
+    return url.protocol === 'https:' && ['remotive.com', 'www.remotive.com'].includes(url.hostname)
+      ? url.href
+      : null;
+  } catch {
+    return null;
   }
 }
-
-syncRemoteJobs();
+export function transformJob(job, fetchedAt) {
+  const location = String(job.candidate_required_location || '').trim();
+  if (
+    !/worldwide|anywhere|africa|emea|nigeria/i.test(location) ||
+    !safeURL(job.url) ||
+    !job.title ||
+    !job.company_name ||
+    !job.id
+  )
+    return null;
+  const description = String(job.description || '')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/\s+/g, ' ')
+    .replace(/\s+([.,!?;:])/g, '$1')
+    .trim();
+  const published =
+    job.publication_date && !Number.isNaN(Date.parse(job.publication_date))
+      ? new Date(job.publication_date).toISOString()
+      : null;
+  return {
+    id: `remotive-${job.id}`,
+    title: String(job.title).trim(),
+    company: String(job.company_name).trim(),
+    category: mapCategory(job.category, job.title),
+    salary: typeof job.salary === 'string' && job.salary.trim() ? job.salary.trim() : null,
+    location,
+    type: String(job.job_type || 'Not specified').replace(/_/g, ' '),
+    tags: Array.isArray(job.tags)
+      ? job.tags.filter((tag) => typeof tag === 'string').slice(0, 5)
+      : [],
+    publishedAt: published,
+    fetchedAt,
+    description: description.length > 240 ? `${description.slice(0, 237)}…` : description,
+    applyUrl: safeURL(job.url),
+    source: 'Remotive',
+  };
+}
+async function syncRemoteJobs() {
+  const response = await fetch('https://remotive.com/api/remote-jobs?limit=100', {
+    signal: AbortSignal.timeout(30_000),
+  });
+  if (!response.ok)
+    throw new Error(`Remotive returned HTTP ${response.status}. Existing snapshot was kept.`);
+  const data = await response.json();
+  if (!Array.isArray(data.jobs))
+    throw new Error('Unexpected source response. Existing snapshot was kept.');
+  const fetchedAt = new Date().toISOString();
+  const jobs = data.jobs
+    .map((job) => transformJob(job, fetchedAt))
+    .filter(Boolean)
+    .slice(0, 24);
+  const target = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    '../src/data/mockJobs.ts',
+  );
+  const source = `// Source snapshot, not a guarantee of availability or Nigeria eligibility.\nimport type { RemoteJobListing } from '../types';\n\nexport const CURATED_REMOTE_JOBS: RemoteJobListing[] = ${JSON.stringify(jobs, null, 2)};\n`;
+  fs.writeFileSync(`${target}.tmp`, source);
+  fs.renameSync(`${target}.tmp`, target);
+  console.log(
+    `Updated ${jobs.length} source listings. No salaries or verification claims were inferred.`,
+  );
+}
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  syncRemoteJobs().catch((error) => {
+    console.error(error.message);
+    process.exitCode = 1;
+  });
+}

@@ -1,153 +1,209 @@
-import React, { useState } from 'react';
-import { CheckCircle2, ShieldCheck, Lock, CreditCard, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowRight, Check, Info, LoaderCircle, LockKeyhole, X } from 'lucide-react';
+import type { PublicConfig, ReviewInput, TabName } from '../types/index.ts';
+import { api, savePurchase } from '../lib/api.ts';
+import { PRICE_LABEL } from '../lib/constants.ts';
 
-interface PaystackCheckoutProps {
-  onSuccess: () => void;
+export function PaystackCheckout({
+  input,
+  config,
+  onCancel,
+  onNavigate,
+}: {
+  input: ReviewInput;
+  config: PublicConfig;
   onCancel: () => void;
-  userEmail?: string;
-}
-
-declare global {
-  interface Window {
-    PaystackPop?: any;
-  }
-}
-
-export const PaystackCheckout: React.FC<PaystackCheckoutProps> = ({ onSuccess, onCancel, userEmail = 'candidate@gmail.com' }) => {
-  const [email, setEmail] = useState(userEmail);
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const handlePaystackPayment = () => {
-    setIsProcessing(true);
-    // Replace with your Live Paystack Public Key in Cloudflare Pages (e.g. pk_live_...) or .env
-    // @ts-ignore
-    const paystackKey = (import.meta as any).env?.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_sample_cvfix_nigeria';
-
-    if (window.PaystackPop && window.PaystackPop.setup) {
-      const handler = window.PaystackPop.setup({
-        key: paystackKey,
-        email: email || 'user@cvfix.com.ng',
-        amount: 1000 * 100, // ₦1,000 in kobo
-        currency: 'NGN',
-        ref: 'CVFIX_' + Math.floor(Math.random() * 1000000000 + 1),
-        callback: function (response: any) {
-          setIsProcessing(false);
-          onSuccess();
-        },
-        onClose: function () {
-          setIsProcessing(false);
-        },
-      });
-      handler.openIframe();
-    } else {
-      setTimeout(() => {
-        setIsProcessing(false);
-        onSuccess();
-      }, 1000);
+  onNavigate: (tab: TabName) => void;
+}) {
+  const [email, setEmail] = useState(
+    input.cvText.match(/[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}/)?.[0] || '',
+  );
+  const [consent, setConsent] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState('');
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const dialog = ref.current;
+    dialog?.showModal();
+    return () => {
+      dialog?.close();
+    };
+  }, []);
+  async function checkout(event: React.FormEvent) {
+    event.preventDefault();
+    setError('');
+    if (!config.paymentsEnabled) return;
+    if (!consent) {
+      setError('Please confirm your consent before checkout.');
+      return;
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Please provide a valid email for your payment receipt.');
+      return;
+    }
+    setProcessing(true);
+    try {
+      const session = await api<{ reviewToken: string; expiresAt: number }>('/api/analyze-cv', {
+        ...input,
+        consent: true,
+      });
+      const payment = await api<{ authorizationUrl: string; reference: string }>(
+        '/api/payments/initialize',
+        { reviewToken: session.reviewToken, email },
+      );
+      savePurchase({
+        reviewToken: session.reviewToken,
+        reference: payment.reference,
+        expiresAt: session.expiresAt,
+      });
+      window.location.assign(payment.authorizationUrl);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : 'Checkout could not be started. Please try again.',
+      );
+      setProcessing(false);
+    }
+  }
+  const navigate = (tab: TabName) => {
+    onCancel();
+    onNavigate(tab);
   };
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-      <div className="relative w-full max-w-lg bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-2xl text-left">
-        {/* Close Button */}
+    <dialog
+      ref={ref}
+      className="checkout-dialog"
+      aria-labelledby="checkout-title"
+      onCancel={(event) => {
+        event.preventDefault();
+        if (!processing) onCancel();
+      }}
+      onClick={(event) => {
+        if (event.target === event.currentTarget && !processing) onCancel();
+      }}
+    >
+      <div className="checkout-content">
         <button
+          className="icon-button modal-close"
+          aria-label="Close checkout"
+          disabled={processing}
           onClick={onCancel}
-          className="absolute top-5 right-5 p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
         >
-          <X className="w-5 h-5" />
+          <X size={21} />
         </button>
-
-        {/* Top Header */}
-        <div className="flex items-center gap-2 pb-4 border-b border-slate-100">
-          <span className="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
-          <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
-            Executive Career Unlock
-          </span>
-          <span className="ml-auto mr-6 px-2 py-0.5 rounded bg-teal-50 text-teal-800 text-[10px] font-bold border border-teal-200">
-            Special Launch Offer
-          </span>
+        <span className="checkout-icon">
+          <LockKeyhole size={24} />
+        </span>
+        <span className="eyebrow small">YOUR NEXT STEP</span>
+        <h2 id="checkout-title">
+          A clearer CV.
+          <br />
+          <em>Ready to make yours.</em>
+        </h2>
+        <p>Get your complete editable CV, a cover-letter draft, and Word + PDF downloads.</p>
+        <div className="checkout-price">
+          <strong>{PRICE_LABEL}</strong>
+          <span>One time. No subscription.</span>
         </div>
-
-        {/* Pricing Box */}
-        <div className="mt-5">
-          <h3 className="text-xl font-extrabold text-slate-900">
-            Unlock Full Line-by-Line CV Rewrite & Cover Letter
-          </h3>
-          <p className="text-xs text-slate-500 mt-1">
-            Certified Harvard-format ATS PDF ready for direct job submission.
-          </p>
-
-          <div className="my-5 p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-            <div>
-              <span className="text-xs text-slate-400 line-through">Standard Fee: ₦10,000</span>
-              <div className="flex items-baseline gap-1.5 mt-0.5">
-                <span className="text-3xl font-extrabold text-slate-900">₦1,000</span>
-                <span className="text-xs text-teal-800 font-semibold">one-time only (~$0.75)</span>
-              </div>
-            </div>
-            <div className="text-right">
-              <span className="text-[10px] uppercase font-bold px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-900 border border-emerald-200">
-                Instant Delivery
+        <ul className="checkout-list">
+          <li>
+            <Check size={15} />
+            Your actual names, dates and education preserved
+          </li>
+          <li>
+            <Check size={15} />
+            Conservative wording edits, no invented metrics
+          </li>
+          <li>
+            <Check size={15} />
+            Review, approve and export in this browser
+          </li>
+        </ul>
+        {!config.paymentsEnabled ? (
+          <>
+            <div className="info-banner">
+              <Info size={19} />
+              <span>
+                Paid downloads are not connected yet. No payment will be taken. The free review and
+                fictional sample editor remain available.
               </span>
             </div>
-          </div>
-        </div>
-
-        {/* Features Checklist */}
-        <div className="space-y-2.5 text-xs text-slate-700 mb-6">
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="w-4 h-4 text-teal-700 shrink-0 mt-0.5" />
-            <span><strong>Line-by-Line Achievement Rewriter:</strong> 20+ action bullets built on Google's X-Y-Z formula.</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="w-4 h-4 text-teal-700 shrink-0 mt-0.5" />
-            <span><strong>Full Naija-to-Global Reframe:</strong> NYSC, HND, and local experience translated for global recruiters.</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="w-4 h-4 text-teal-700 shrink-0 mt-0.5" />
-            <span><strong>Targeted 1-Page Cover Letter:</strong> Tailored specifically to your dream remote role.</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="w-4 h-4 text-teal-700 shrink-0 mt-0.5" />
-            <span><strong>1-Click ATS-Certified PDF Export:</strong> Clean single-page layout that passes all parsers.</span>
-          </div>
-        </div>
-
-        {/* Email Input */}
-        <div className="mb-4">
-          <label className="block text-xs font-bold text-slate-700 mb-1">
-            Email for Receipt & PDF Delivery:
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your.email@gmail.com"
-            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-700 focus:bg-white"
-          />
-        </div>
-
-        {/* Actions */}
-        <div className="space-y-2.5">
-          <button
-            onClick={handlePaystackPayment}
-            disabled={isProcessing}
-            className="w-full py-3.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white font-bold text-sm shadow-sm flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50"
-          >
-            <Lock className="w-4 h-4" />
-            <span>{isProcessing ? "Connecting to Paystack..." : "Pay ₦1,000 & Unlock Full Package"}</span>
-          </button>
-        </div>
-
-        {/* Security Seals */}
-        <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-          <span className="flex items-center gap-1">
-            <CreditCard className="w-3.5 h-3.5 text-slate-400" /> Card, Bank Transfer, USSD, OPay & PalmPay
-          </span>
-          <span className="font-semibold text-slate-600">🔒 256-Bit SSL Secured</span>
-        </div>
+            <button className="button button-primary full-width" onClick={onCancel}>
+              Back to my free review <ArrowRight size={17} />
+            </button>
+          </>
+        ) : (
+          <form onSubmit={(event) => void checkout(event)} noValidate>
+            {config.paymentMode === 'test' && (
+              <div className="info-banner">
+                <Info size={16} />
+                <span>Paystack test mode. This checkout cannot process a live payment.</span>
+              </div>
+            )}
+            <label htmlFor="checkout-email">Email for your Paystack receipt</label>
+            <input
+              id="checkout-email"
+              type="email"
+              autoComplete="email"
+              maxLength={254}
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="you@example.com"
+              required
+              disabled={processing}
+            />
+            <p className="field-help">
+              Documents download here after payment verification. We do not email your CV.
+            </p>
+            <label className="checkbox-label checkout-consent">
+              <input
+                type="checkbox"
+                checked={consent}
+                onChange={(event) => setConsent(event.target.checked)}
+                disabled={processing}
+              />
+              <span>
+                I agree to CVFix processing my CV to prepare this package. I have read the{' '}
+                <button type="button" className="inline-link" onClick={() => navigate('privacy')}>
+                  privacy notice
+                </button>
+                ,{' '}
+                <button type="button" className="inline-link" onClick={() => navigate('terms')}>
+                  terms
+                </button>{' '}
+                and{' '}
+                <button type="button" className="inline-link" onClick={() => navigate('refunds')}>
+                  payment policy
+                </button>
+                .
+              </span>
+            </label>
+            {error && (
+              <div className="form-error" role="alert">
+                {error}
+              </div>
+            )}
+            <button
+              className="button button-primary full-width"
+              type="submit"
+              disabled={processing}
+            >
+              {processing ? (
+                <>
+                  <LoaderCircle size={17} className="spin" /> Preparing secure checkout…
+                </>
+              ) : (
+                <>
+                  Continue to Paystack <ArrowRight size={17} />
+                </>
+              )}
+            </button>
+            <p className="checkout-footer">
+              <LockKeyhole size={12} /> CV text is not sent to Paystack. Payment is verified on our
+              server.
+            </p>
+          </form>
+        )}
       </div>
-    </div>
+    </dialog>
   );
-};
+}

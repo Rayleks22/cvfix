@@ -1,32 +1,26 @@
-name: Auto-Sync Remote Jobs for Nigeria
-
+name: Refresh Remotive source listings
 on:
   schedule:
-    # Runs every 12 hours (at 00:00 and 12:00 UTC)
     - cron: '0 0,12 * * *'
-  workflow_dispatch: # Allows manual trigger from GitHub UI
-
+  workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   sync-jobs:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      - name: Run Job Ingestion Script
+          node-version: 22
+      - name: Update source snapshot
         run: node scripts/fetch-remote-jobs.js
-
-      - name: Commit and Push Updated Job Data
+      - name: Commit changed source data
         run: |
-          git config --global user.name "CVFix Remote Sync Bot"
-          git config --global user.email "bot@cvfix.com.ng"
+          git config user.name "CVFix Source Sync Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/data/mockJobs.ts
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(jobs): auto-sync live worldwide remote jobs [skip ci]" && git push)
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(jobs): refresh source snapshot without inferred claims [skip ci]"
+            git push
+          fi
