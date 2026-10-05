@@ -95,14 +95,14 @@ export function PaystackCheckout({
         </span>
         <span className="eyebrow small">YOUR NEXT STEP</span>
         <h2 id="checkout-title">
-          A clearer CV.
+          A clearer CV
           <br />
-          <em>Ready to make yours.</em>
+          <em>Ready to make yours</em>
         </h2>
         <p>Get your complete editable CV, a cover-letter draft, and Word + PDF downloads.</p>
         <div className="checkout-price">
           <strong>{PRICE_LABEL}</strong>
-          <span>One time. No subscription.</span>
+          <span>One time · No subscription</span>
         </div>
         <ul className="checkout-list">
           <li>

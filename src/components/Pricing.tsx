@@ -18,7 +18,7 @@ export function Pricing({
           <h2>
             Start free. Go further
             <br />
-            <em>when you’re ready.</em>
+            <em>when you’re ready</em>
           </h2>
           <p>No subscription. No surprise extras. See your feedback before deciding.</p>
         </div>

@@ -40,9 +40,9 @@ export function JobBoard({
       <div className="section-heading">
         <span className="eyebrow">YOUR NEXT OPPORTUNITY COULD BE ANYWHERE</span>
         <h1>
-          Explore remote roles.
+          Explore remote roles
           <br />
-          <em>Bring your real experience.</em>
+          <em>Bring your real experience</em>
         </h1>
         <p>
           A secondary resource for your job search, sourced from Remotive. Check the employer’s
@@ -150,7 +150,7 @@ export function JobBoard({
       {!jobs.length && (
         <div className="empty-state">
           <Briefcase size={30} />
-          <h2>No roles in this filter.</h2>
+          <h2>No roles in this filter</h2>
           <p>Try another category or search term. Availability depends on the source snapshot.</p>
           <button
             className="button button-outline"

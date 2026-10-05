@@ -26,9 +26,9 @@ export function HomeSections({
           <div className="section-heading">
             <span className="eyebrow">LESS GUESSWORK. MORE CONFIDENCE.</span>
             <h2>
-              A clearer CV.
+              A clearer CV
               <br />
-              <em>One step at a time.</em>
+              <em>One step at a time</em>
             </h2>
             <p>You don’t need to start from scratch. Start with the experience you already have.</p>
           </div>
@@ -73,9 +73,9 @@ export function HomeSections({
           <div className="example-copy">
             <span className="eyebrow">SAME EXPERIENCE. CLEARER STORY.</span>
             <h2>
-              Better wording.
+              Better wording
               <br />
-              <em>Not made-up wins.</em>
+              <em>Not made-up wins</em>
             </h2>
             <p>
               A strong CV doesn’t need invented percentages or a title you never held. It needs to
@@ -84,9 +84,9 @@ export function HomeSections({
             <div className="example-promise">
               <ShieldCheck size={20} />
               <span>
-                No invented metrics.
+                No invented metrics
                 <br />
-                <strong>No extra qualifications. No inflated titles.</strong>
+                <strong>No extra qualifications · No inflated titles</strong>
               </span>
             </div>
             <button className="text-button" onClick={onSample}>
@@ -128,7 +128,7 @@ export function HomeSections({
           <div>
             <span className="eyebrow">BUILT WITH YOUR CONTEXT IN MIND</span>
             <h2>
-              Your NYSC. Your HND. <em>Your story.</em>
+              Your NYSC · Your HND · <em>Your story</em>
             </h2>
             <p>
               Local experience belongs on your CV. Keep your official qualifications and job titles,
@@ -141,7 +141,7 @@ export function HomeSections({
             <strong>
               Nigerian
               <br />
-              jobseekers.
+              jobseekers
             </strong>
             <span>✳</span>
           </span>
@@ -153,14 +153,14 @@ export function HomeSections({
           <div className="section-heading">
             <span className="eyebrow">A FEW THINGS WORTH KNOWING</span>
             <h2>
-              Good questions.
+              Good questions
               <br />
-              <em>Clear answers.</em>
+              <em>Clear answers</em>
             </h2>
             <p>
               Still need a hand?{' '}
               <button className="inline-link" onClick={() => onNavigate('contact')}>
-                Visit help & contact.
+                Visit help & contact
               </button>
             </p>
           </div>
@@ -232,7 +232,7 @@ export function HomeSections({
           <div>
             <span className="eyebrow">YOU’VE GOT SOMETHING TO OFFER.</span>
             <h2>
-              Let your CV <em>show it.</em>
+              Let your CV <em>show it</em>
             </h2>
           </div>
           <button className="button button-primary" onClick={onStart}>

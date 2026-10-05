@@ -315,7 +315,7 @@ export function App() {
             {stage === 'verifying' && (
               <section className="container payment-recovery" role="status">
                 <LoaderCircle size={35} className="spin" />
-                <h1>Checking your payment.</h1>
+                <h1>Checking your payment</h1>
                 <p>
                   We’re verifying the amount and review reference directly with Paystack. Please
                   don’t pay again.
@@ -327,7 +327,7 @@ export function App() {
                 <span className="section-icon warm">
                   <Info size={25} />
                 </span>
-                <h1>Let’s check before you try again.</h1>
+                <h1>Let’s check before you try again</h1>
                 <div className="form-error" role="alert">
                   {paymentError}
                 </div>

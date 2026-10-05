@@ -94,9 +94,9 @@ export function PremiumUnlockedView({
       </div>
       <div className="editor-heading">
         <div>
-          <span className="eyebrow">YOUR DOCUMENT. YOUR FINAL SAY.</span>
+          <span className="eyebrow">YOUR DOCUMENT · YOUR FINAL SAY</span>
           <h1>
-            Make it <em>yours.</em>
+            Make it <em>yours</em>
           </h1>
           <p>Review the wording, add verified details, and check every fact before downloading.</p>
         </div>

@@ -10,7 +10,6 @@ export function Brand() {
       </span>
       <span className="brand-word">
         cv<span>fix</span>
-        <span className="brand-dot">.</span>
       </span>
     </span>
   );

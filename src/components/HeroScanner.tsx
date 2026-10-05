@@ -98,8 +98,8 @@ export function HeroScanner({
             <span className="status-dot" /> YOUR NEXT CHAPTER STARTS HERE
           </div>
           <h1>
-            Good experience.
-            <br />A <em>better CV.</em>
+            Good experience
+            <br />A <em>better CV</em>
           </h1>
           <p className="hero-description">
             You’ve done the work. Let’s help your CV show it. Get clear feedback and stronger
@@ -141,7 +141,7 @@ export function HeroScanner({
             <div className="scanner-heading">
               <div>
                 <span className="eyebrow small">LET’S START WITH YOUR CV</span>
-                <h2>Your next step, made simple.</h2>
+                <h2>Your next step, made simple</h2>
               </div>
               <span className="free-tag">FREE</span>
             </div>
@@ -343,7 +343,7 @@ export function HeroScanner({
             </p>
           </form>
           <div className="scanner-caption">
-            <span>Start free. Make it yours.</span>
+            <span>Start free · Make it yours</span>
             <span>
               Full CV package <strong>₦1,000</strong> · one time
             </span>

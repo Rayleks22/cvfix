@@ -23,7 +23,7 @@ export function LegalPage({
   > = {
     privacy: {
       eyebrow: 'YOUR INFORMATION, EXPLAINED',
-      title: 'Privacy, without the small-print surprises.',
+      title: 'Privacy, without the small-print surprises',
       description:
         'This notice describes the behaviour of this version of CVFix. Free reviews and paid checkout do not process your CV in the same way.',
       body: (
@@ -91,7 +91,7 @@ export function LegalPage({
     },
     terms: {
       eyebrow: 'LET’S BE CLEAR ABOUT THE SERVICE',
-      title: 'Terms of service.',
+      title: 'Terms of service',
       description:
         'CVFix helps you present your real experience more clearly. It does not change who you are or guarantee a job.',
       body: (
@@ -148,7 +148,7 @@ export function LegalPage({
     },
     refunds: {
       eyebrow: 'IF SOMETHING GOES WRONG',
-      title: 'Payment help & refunds.',
+      title: 'Payment help & refunds',
       description:
         'Keep your reference. Retry verification. Don’t pay a second time just because a page did not load.',
       body: (
@@ -195,7 +195,7 @@ export function LegalPage({
     },
     contact: {
       eyebrow: 'A LITTLE HELP WITH YOUR NEXT STEP',
-      title: 'Let’s get you unstuck.',
+      title: 'Let’s get you unstuck',
       description: 'For review questions, failed downloads or a payment that needs attention.',
       body: (
         <>
@@ -239,12 +239,12 @@ export function LegalPage({
     },
     methodology: {
       eyebrow: 'NO MYSTERY NUMBER',
-      title: 'How we review your CV.',
+      title: 'How we review your CV',
       description:
         'A versioned, rule-based text assessment—not a proprietary ATS score or a prediction of success.',
       body: (
         <>
-          <h2>Four categories. Equal weight.</h2>
+          <h2>Four categories · Equal weight</h2>
           <p>
             The CVFix score is the rounded average of four 0–100 category scores. There is no hidden
             salary, seniority, institution-prestige or nationality bonus or penalty.

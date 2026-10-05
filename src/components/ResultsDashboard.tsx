@@ -44,7 +44,7 @@ export function ResultsDashboard({
         <h1>
           A good next step
           <br />
-          <em>starts with clarity.</em>
+          <em>starts with clarity</em>
         </h1>
         <p>
           {result.candidateName
@@ -62,7 +62,7 @@ export function ResultsDashboard({
               </span>
               <div>
                 <span className="eyebrow small">KEEP THESE</span>
-                <h2>You have a foundation to build on.</h2>
+                <h2>You have a foundation to build on</h2>
               </div>
             </div>
             <ul className="strengths-list">
@@ -83,8 +83,8 @@ export function ResultsDashboard({
                 <span className="eyebrow small">YOUR NEXT IMPROVEMENTS</span>
                 <h2>
                   {result.suggestions.length
-                    ? `${result.suggestions.length} ${result.suggestions.length === 1 ? 'way' : 'ways'} to strengthen your CV.`
-                    : 'Keep checking the details.'}
+                    ? `${result.suggestions.length} ${result.suggestions.length === 1 ? 'way' : 'ways'} to strengthen your CV`
+                    : 'Keep checking the details'}
                 </h2>
               </div>
             </div>
@@ -134,7 +134,7 @@ export function ResultsDashboard({
                 </span>
                 <div>
                   <span className="eyebrow small">YOUR WORDING, IMPROVED</span>
-                  <h2>Same facts. A clearer action.</h2>
+                  <h2>Same facts · A clearer action</h2>
                 </div>
               </div>
               <div className="rewrite-box before-box">
@@ -157,8 +157,8 @@ export function ResultsDashboard({
             <span className="eyebrow small">MAKE IT RELEVANT</span>
             <h2>
               {result.keywordSource === 'job-description'
-                ? 'A check against your job description.'
-                : 'A little more context helps.'}
+                ? 'A check against your job description'
+                : 'A little more context helps'}
             </h2>
             {result.keywordSource === 'job-description' ? (
               <>
@@ -231,7 +231,7 @@ export function ResultsDashboard({
           </article>
           <article className="report-card questions-card">
             <span className="eyebrow small">ADD A DETAIL YOU CAN STAND BEHIND</span>
-            <h2>A couple of useful questions.</h2>
+            <h2>A couple of useful questions</h2>
             <ul>
               {result.followUpQuestions.map((question) => (
                 <li key={question}>{question}</li>

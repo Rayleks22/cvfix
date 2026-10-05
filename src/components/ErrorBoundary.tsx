@@ -10,7 +10,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { failed: 
   render() {
     return this.state.failed ? (
       <main className="container payment-recovery">
-        <h1>Something didn’t load.</h1>
+        <h1>Something didn’t load</h1>
         <p>
           Please reload the page. If you have paid, keep your payment reference and don’t pay again.
           Your encrypted checkout session may still be recoverable in this tab.

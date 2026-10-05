@@ -105,7 +105,7 @@ async def main(base, production_headers=False):
         await page.locator('.mobile-nav').get_by_role('link', name='Pricing', exact=True).click()
         assert '/pricing' in page.url
         await page.go_back(wait_until='networkidle')
-        assert await page.get_by_role('heading', name='Good experience. A better CV.').count() == 1
+        assert await page.get_by_role('heading', name='Good experience A better CV').count() == 1
         findings['checks'].append('320/360/390/768px layouts and mobile menu/back navigation')
         await page.set_viewport_size({'width': 1440, 'height': 1000})
         for filename, expected in [('old-cv.doc', 'Older .doc'), ('oversized.pdf', 'over 5 MB'), ('no-selectable-text.pdf', 'little or no selectable text')]:
