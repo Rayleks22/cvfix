@@ -18,7 +18,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
       "bookkeeping"
     ],
     "publishedAt": "2026-10-02T20:01:00.000Z",
-    "fetchedAt": "2026-10-06T17:43:40.012Z",
+    "fetchedAt": "2026-10-07T03:41:25.111Z",
     "description": "CT Marketing Agency is seeking skilled Freelance Copywriters to write high-quality, SEO-driven content for eCommerce and lead generation websites. This is a freelance, project-based writing role. The ideal candidate has excellent English…",
     "applyUrl": "https://remotive.com/remote-jobs/writing/freelance-copywriter-1749306",
     "source": "Remotive"
@@ -39,7 +39,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
       "frontend"
     ],
     "publishedAt": "2026-09-18T15:10:28.000Z",
-    "fetchedAt": "2026-10-06T17:43:40.012Z",
+    "fetchedAt": "2026-10-07T03:41:25.111Z",
     "description": "We are hiring a contract-based Senior Shopify Developer to contribute to our Design and Development Team. Original Job posting link here 🌎 About garden3d We are worker owned creative collective, innovating on everything from brands and …",
     "applyUrl": "https://remotive.com/remote-jobs/software-development/senior-shopify-developer-2091140",
     "source": "Remotive"
@@ -60,7 +60,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
       "html"
     ],
     "publishedAt": "2026-09-11T20:16:48.000Z",
-    "fetchedAt": "2026-10-06T17:43:40.012Z",
+    "fetchedAt": "2026-10-07T03:41:25.111Z",
     "description": "Coalition Technologies is seeking a reliable, detail-oriented, and highly organized Remote Office Assistant to support administrative, bookkeeping, billing, reporting, data entry, and internal operations tasks. This role is ideal for som…",
     "applyUrl": "https://remotive.com/remote-jobs/marketing/remote-office-assistant-1680495",
     "source": "Remotive"
@@ -80,7 +80,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
       "Inside Sales"
     ],
     "publishedAt": "2026-09-08T21:47:54.000Z",
-    "fetchedAt": "2026-10-06T17:43:40.012Z",
+    "fetchedAt": "2026-10-07T03:41:25.111Z",
     "description": "About Us We are a financial services start up focusing on helping to improve consumer credit profiles. We are currently seeking KPI driven sales representatives looking to earn up to 45K in their first year while working remotely. We off…",
     "applyUrl": "https://remotive.com/remote-jobs/sales/inside-sales-contractor-2086540",
     "source": "Remotive"
@@ -101,7 +101,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
       "documentation"
     ],
     "publishedAt": "2026-09-07T01:10:43.000Z",
-    "fetchedAt": "2026-10-06T17:43:40.012Z",
+    "fetchedAt": "2026-10-07T03:41:25.111Z",
     "description": "Unió Digital is an Arizona-based managed service provider (MSP) delivering Managed IT Services, Low Voltage Cabling, Access Control, Video Surveillance, and Intrusion Services. We believe technology should be intuitive, not intimidating.…",
     "applyUrl": "https://remotive.com/remote-jobs/information-technology/tier-iii-service-desk-engineer-2091045",
     "source": "Remotive"
