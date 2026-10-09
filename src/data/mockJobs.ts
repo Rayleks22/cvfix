@@ -18,7 +18,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
       "documentation"
     ],
     "publishedAt": "2026-10-07T01:11:09.000Z",
-    "fetchedAt": "2026-10-09T04:00:23.675Z",
+    "fetchedAt": "2026-10-09T17:49:31.427Z",
     "description": "Unió Digital is an Arizona-based managed service provider (MSP) delivering Managed IT Services, Low Voltage Cabling, Access Control, Video Surveillance, and Intrusion Services. We believe technology should be intuitive, not intimidating.…",
     "applyUrl": "https://remotive.com/remote-jobs/information-technology/tier-iii-service-desk-engineer-2091045",
     "source": "Remotive"
@@ -35,7 +35,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
       "REST"
     ],
     "publishedAt": "2026-10-04T16:53:34.000Z",
-    "fetchedAt": "2026-10-09T04:00:23.675Z",
+    "fetchedAt": "2026-10-09T17:49:31.427Z",
     "description": "Our organization is seeking content writers to create articles and blog posts on a variety of topics. The rate of pay is $20 per 100 words (this comes out to approximately $100 per article or $50 per hour). Some topics you may be asked t…",
     "applyUrl": "https://remotive.com/remote-jobs/writing/freelance-writer-1185979",
     "source": "Remotive"
@@ -56,7 +56,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
       "bookkeeping"
     ],
     "publishedAt": "2026-10-02T20:01:00.000Z",
-    "fetchedAt": "2026-10-09T04:00:23.675Z",
+    "fetchedAt": "2026-10-09T17:49:31.427Z",
     "description": "CT Marketing Agency is seeking skilled Freelance Copywriters to write high-quality, SEO-driven content for eCommerce and lead generation websites. This is a freelance, project-based writing role. The ideal candidate has excellent English…",
     "applyUrl": "https://remotive.com/remote-jobs/writing/freelance-copywriter-1749306",
     "source": "Remotive"
@@ -77,7 +77,7 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
       "frontend"
     ],
     "publishedAt": "2026-09-18T15:10:28.000Z",
-    "fetchedAt": "2026-10-09T04:00:23.675Z",
+    "fetchedAt": "2026-10-09T17:49:31.427Z",
     "description": "We are hiring a contract-based Senior Shopify Developer to contribute to our Design and Development Team. Original Job posting link here 🌎 About garden3d We are worker owned creative collective, innovating on everything from brands and …",
     "applyUrl": "https://remotive.com/remote-jobs/software-development/senior-shopify-developer-2091140",
     "source": "Remotive"
@@ -98,29 +98,9 @@ export const CURATED_REMOTE_JOBS: RemoteJobListing[] = [
       "html"
     ],
     "publishedAt": "2026-09-11T20:16:48.000Z",
-    "fetchedAt": "2026-10-09T04:00:23.675Z",
+    "fetchedAt": "2026-10-09T17:49:31.427Z",
     "description": "Coalition Technologies is seeking a reliable, detail-oriented, and highly organized Remote Office Assistant to support administrative, bookkeeping, billing, reporting, data entry, and internal operations tasks. This role is ideal for som…",
     "applyUrl": "https://remotive.com/remote-jobs/marketing/remote-office-assistant-1680495",
-    "source": "Remotive"
-  },
-  {
-    "id": "remotive-2086540",
-    "title": "Inside Sales Contractor",
-    "company": "Credit Wellness, LLC",
-    "category": "Sales & Marketing",
-    "salary": "OTE $25k - $35k",
-    "location": "Worldwide",
-    "type": "full time",
-    "tags": [
-      "CRM",
-      "google sheets",
-      "financial services",
-      "Inside Sales"
-    ],
-    "publishedAt": "2026-09-08T21:47:54.000Z",
-    "fetchedAt": "2026-10-09T04:00:23.675Z",
-    "description": "About Us We are a financial services start up focusing on helping to improve consumer credit profiles. We are currently seeking KPI driven sales representatives looking to earn up to 45K in their first year while working remotely. We off…",
-    "applyUrl": "https://remotive.com/remote-jobs/sales/inside-sales-contractor-2086540",
     "source": "Remotive"
   }
 ];
